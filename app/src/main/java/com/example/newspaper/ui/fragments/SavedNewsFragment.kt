@@ -24,9 +24,6 @@ class SavedNewsFragment : BaseFragment(R.layout.fragment_saved_news){
         binding = FragmentSavedNewsBinding.inflate(inflater)
 
         adapter.onClick {
-            val bundle = Bundle().apply {
-                putSerializable("key", it)
-            }
             findNavController().navigate(SavedNewsFragmentDirections.actionSavedNewsFragmentToArticleFragment(it))
         }
 

@@ -36,9 +36,6 @@ class SearchNewsFragment : BaseFragment(R.layout.fragment_search_news) {
         }
 
         adapter.onClick {
-            val bundle = Bundle().apply {
-                putSerializable("key", it)
-            }
             findNavController().navigate(SearchNewsFragmentDirections.actionSearchNewsFragmentToArticleFragment(it))
         }
 

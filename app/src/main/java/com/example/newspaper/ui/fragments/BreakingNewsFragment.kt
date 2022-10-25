@@ -25,9 +25,6 @@ class BreakingNewsFragment : BaseFragment(R.layout.fragment_breaking_news) {
         binding.lifecycleOwner = this
 
         adapter.onClick {
-            val bundle = Bundle().apply {
-                putSerializable("key", it)
-            }
             findNavController().navigate(BreakingNewsFragmentDirections.actionBreakingNewsFragmentToArticleFragment(it))
         }
 
