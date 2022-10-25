@@ -2,6 +2,7 @@ package com.example.newspaper.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 data class NewsResponse(
     val articles: List<Article>,
@@ -21,7 +22,7 @@ data class Article(
     val title: String, // Smoked haddock, baked gammon: Nigel Slater’s winter recipes that make the most of your oven
     val url: String, // https://www.theguardian.com/food/2022/oct/17/smoked-haddock-baked-gammon-nigel-slater-winter-recipes-that-make-the-most-of-your-oven
     val urlToImage: String // https://i.guim.co.uk/img/media/5686d5d8e09eb971748443bc3851de1bff573f8d/0_385_5042_3024/master/5042.jpg?width=1200&height=630&quality=85&auto=format&fit=crop&overlay-align=bottom%2Cleft&overlay-width=100p&overlay-base64=L2ltZy9zdGF0aWMvb3ZlcmxheXMvdG8tZGVmYXVsdC5wbmc&enable=upscale&s=d8cb7327423b362d39b5d2799e39a2b4
-)
+) : Serializable
 
 data class Source(
     val id: String, // business-insider

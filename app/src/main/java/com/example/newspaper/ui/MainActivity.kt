@@ -16,10 +16,6 @@ lateinit var binding : ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     lateinit var viewModel: NewsViewModel
-    /*val viewModel: NewsViewModel by lazy {
-        ArticleDatabase.invoke(baseContext)
-        ViewModelProvider(this, NewsViewModel.NewsVMFactory(NewsRepository(ArticleDatabase.instance!!)))[NewsViewModel::class.java]
-    }*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,13 +25,19 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavigationView.setupWithNavController(navController)
 
-//        ArticleDatabase.invoke(baseContext)
-//        val newsRepository = NewsRepository(ArticleDatabase.instance!!)
+
         val newsRepository = NewsRepository(ArticleDatabase.getInstance(this))
         val viewModelFactory = NewsViewModel.NewsVMFactory(newsRepository)
         viewModel = ViewModelProvider(this, viewModelFactory)[NewsViewModel::class.java]
 
 
+    }
+
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.unbind()
     }
 }
 // 9f8642e7503f43cb872ad0be9bc86b37

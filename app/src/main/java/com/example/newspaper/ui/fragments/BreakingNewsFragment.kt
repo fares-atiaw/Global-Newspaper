@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.example.newspaper.R
 import com.example.newspaper.adapters.NewsAdapter
 import com.example.newspaper.databinding.FragmentBreakingNewsBinding
@@ -17,29 +18,35 @@ class BreakingNewsFragment : BaseFragment(R.layout.fragment_breaking_news) {
     lateinit var binding : FragmentBreakingNewsBinding
     private val adapter = NewsAdapter()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentBreakingNewsBinding.inflate(inflater)
 
         binding.x = viewModel
         binding.lifecycleOwner = this
+
+        adapter.onClick {
+            val bundle = Bundle().apply {
+                putSerializable("key", it)
+            }
+            findNavController().navigate(BreakingNewsFragmentDirections.actionBreakingNewsFragmentToArticleFragment(it))
+        }
 
         binding.rvBreakingNews.adapter = adapter
 
         viewModel.breakingNews.observe(viewLifecycleOwner) { resource ->
             when(resource){
                 is Resource.Success -> {
-//                    binding.paginationProgressBar.visibility = View.GONE
+                    binding.paginationProgressBar.visibility = View.GONE
                     resource.data.let {
                         adapter.submitList(it?.articles)
                     }
                 }
                 is Resource.Error -> {
-//                    binding.paginationProgressBar.visibility = View.GONE
+                    binding.paginationProgressBar.visibility = View.GONE
                     Toast.makeText(context, "Error happened : ${resource.message}", Toast.LENGTH_LONG).show()
                 }
-                else ->{
-//                    binding.paginationProgressBar.visibility = View.VISIBLE
-                }
+                else ->
+                    binding.paginationProgressBar.visibility = View.VISIBLE
             }
 
         }
@@ -47,10 +54,10 @@ class BreakingNewsFragment : BaseFragment(R.layout.fragment_breaking_news) {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.unbind()
     }
-
-
 
 }

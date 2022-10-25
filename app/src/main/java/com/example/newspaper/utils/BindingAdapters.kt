@@ -5,10 +5,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.bumptech.glide.Glide
 import com.example.newspaper.R
 import com.example.newspaper.adapters.NewsAdapter
 import com.example.newspaper.data.Article

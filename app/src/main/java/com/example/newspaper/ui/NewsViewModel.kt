@@ -13,20 +13,40 @@ import retrofit2.Response
 class NewsViewModel(val repo : NewsRepository) : ViewModel()
 {
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    val page = 1        // update later
+    val breakingNewsPage = 1        // update later
+
+    val searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
+    val searchNewsPage = 1        // update later
 
     init {
         getBreakingNews()
     }
 
-
+/**For BreakingNewsFragment**/
     fun getBreakingNews(countryString : String = "eg") = viewModelScope.launch {
         breakingNews.postValue(Resource.Loading())
-        val response = repo.getBreakingNews(countryString, page)
+        val response = repo.getBreakingNews(countryString, breakingNewsPage)
         breakingNews.postValue(handleBreakingNewsResponse(response))
     }
 
     private fun handleBreakingNewsResponse(response: Response<NewsResponse>) : Resource<NewsResponse>
+    {
+        if(response.isSuccessful)
+            response.body().let {
+                return Resource.Success(it)
+            }
+        else
+            return Resource.Error(response.message(), response.body())
+    }
+
+/**For SearchNewsFragment**/
+    fun searchForNews(text : String) = viewModelScope.launch {
+        searchNews.postValue(Resource.Loading())
+        val response = repo.getSearchedNews(text, searchNewsPage)
+        searchNews.postValue(handleSearchForNewsResponse(response))
+    }
+
+    private fun handleSearchForNewsResponse(response: Response<NewsResponse>) : Resource<NewsResponse>
     {
         if(response.isSuccessful)
             response.body().let {

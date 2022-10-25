@@ -1,19 +1,20 @@
 package com.example.newspaper.adapters;
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.newspaper.data.Article
 import com.example.newspaper.databinding.ItemPreview2Binding
 import com.example.newspaper.databinding.ItemPreviewBinding
 
 class NewsAdapter : ListAdapter<Article, NewsAdapter.MyViewHolder>(Diff_Article()) {
 
-    var clickListener: ((data :Article) -> Unit)? = null
+    private var clickListener: ((data :Article) -> Unit)? = null
+    fun onClick(listener: (data :Article) -> Unit) {
+        clickListener = listener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder.fromInflating(parent)
