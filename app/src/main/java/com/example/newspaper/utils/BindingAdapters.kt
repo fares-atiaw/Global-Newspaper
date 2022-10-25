@@ -1,13 +1,19 @@
 package com.example.newspaper.utils
 
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.example.newspaper.R
 import com.example.newspaper.adapters.NewsAdapter
 import com.example.newspaper.data.Article
+import com.example.newspaper.data.NewsResponse
+
 
 @BindingAdapter("listData")								/**  COOL  **/
 fun bindList(rv : RecyclerView, data : List<Article>?) {
@@ -19,6 +25,19 @@ fun bindList(rv : RecyclerView, data : List<Article>?) {
         }
     }
 //    Then in the related activity/fragment, assign/attach the adapter into the binding.recyclerview
+}
+
+@BindingAdapter("visibilityCases")
+fun bindProgressBar(progressBar: ProgressBar, result : Resource<NewsResponse>)
+{
+    when(result){
+       is Resource.Success ->
+           progressBar.visibility = View.GONE
+        is Resource.Error ->
+            progressBar.visibility = View.GONE
+        else ->
+            progressBar.visibility = View.VISIBLE
+    }
 }
 
 @BindingAdapter("imageUrl")

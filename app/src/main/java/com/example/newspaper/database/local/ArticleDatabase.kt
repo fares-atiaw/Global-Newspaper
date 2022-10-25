@@ -16,9 +16,29 @@ abstract class ArticleDatabase : RoomDatabase() {                               
     companion object {
 
         @Volatile
-        private var instance: ArticleDatabase? = null
+        var INSTANCE: ArticleDatabase? = null
 
-        operator fun invoke(context: Context) {
+        fun getInstance(context: Context): ArticleDatabase
+        {
+            synchronized(this) {
+                return INSTANCE ?: Room.databaseBuilder(
+                        context,
+                        ArticleDatabase::class.java,
+                        "article_database")
+                        .fallbackToDestructiveMigration()
+                        .build()
+                }
+            }
+
+    }
+
+
+    /*companion object {
+
+        @Volatile
+        var instance: ArticleDatabase? = null
+
+        operator fun invoke(context: Context) {                 // executed when an instance created
             instance ?: synchronized(this) {
                 instance = createDatabase(context)
             }
@@ -31,7 +51,7 @@ abstract class ArticleDatabase : RoomDatabase() {                               
         )
             .fallbackToDestructiveMigration()
             .build()
-    }
+    }*/
 
 
 }

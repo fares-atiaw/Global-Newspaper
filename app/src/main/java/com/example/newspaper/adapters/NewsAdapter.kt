@@ -8,9 +8,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.newspaper.data.Article
+import com.example.newspaper.databinding.ItemPreview2Binding
 import com.example.newspaper.databinding.ItemPreviewBinding
 
-class NewsAdapter(val clickListener: (data :Article) -> Unit) : ListAdapter<Article, NewsAdapter.MyViewHolder>(Diff_Article()) {
+class NewsAdapter : ListAdapter<Article, NewsAdapter.MyViewHolder>(Diff_Article()) {
+
+    var clickListener: ((data :Article) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         return MyViewHolder.fromInflating(parent)
@@ -20,13 +23,15 @@ class NewsAdapter(val clickListener: (data :Article) -> Unit) : ListAdapter<Arti
         holder.bind(getItem(position), clickListener)
     }
 
-    class MyViewHolder private constructor(private val binding: ItemPreviewBinding) :
+    class MyViewHolder private constructor(private val binding: ItemPreview2Binding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(data: Article, clickListener: (data :Article) -> Unit) {
+        fun bind(data: Article, clickListener: ((data :Article) -> Unit)?) {
             binding.article = data
             binding.root.setOnClickListener {
-                clickListener(data)
+                clickListener?.let {
+                    it(data)
+                }
             }
             binding.executePendingBindings()
         }
@@ -37,7 +42,7 @@ class NewsAdapter(val clickListener: (data :Article) -> Unit) : ListAdapter<Arti
         /** static variable(s) or method(s)**/
         companion object {
             fun fromInflating(parent: ViewGroup): MyViewHolder {
-                val binding: ItemPreviewBinding = ItemPreviewBinding.inflate(
+                val binding: ItemPreview2Binding = ItemPreview2Binding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
