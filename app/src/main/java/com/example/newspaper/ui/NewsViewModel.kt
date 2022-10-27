@@ -1,12 +1,16 @@
 package com.example.newspaper.ui
 
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.newspaper.data.Article
 import com.example.newspaper.data.NewsResponse
 import com.example.newspaper.database.NewsRepository
 import com.example.newspaper.utils.Resource
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
@@ -17,6 +21,8 @@ class NewsViewModel(val repo : NewsRepository) : ViewModel()
 
     val searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     val searchNewsPage = 1        // update later
+
+    var savedNews: MutableLiveData<List<Article>> = MutableLiveData()
 
     init {
         getBreakingNews()
@@ -56,6 +62,19 @@ class NewsViewModel(val repo : NewsRepository) : ViewModel()
             return Resource.Error(response.message(), response.body())
     }
 
+/**Deal with Room**/
+    fun saveThisArticle(article: Article) = viewModelScope.launch {
+        val num = repo.addIfNotExist(article)
+        Log.d("NewsViewModel => saveThisArticle(article: Article) ", "--------- $num")
+    }
+
+    fun getMySavedArticles() = viewModelScope.launch {
+        savedNews.postValue(repo.getSavedNews().value)
+    }
+
+    fun deleteThisArticle(article: Article) = viewModelScope.launch {
+        repo.deleteArticle(article)
+    }
 
 
 

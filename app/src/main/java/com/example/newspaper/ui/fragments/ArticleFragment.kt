@@ -23,6 +23,7 @@ class ArticleFragment : BaseFragment(R.layout.fragment_article) {
         binding = FragmentArticleBinding.inflate(inflater)
 
         val data = args.anArticle
+
         binding.webView.apply {
 //            settings.javaScriptEnabled = true
 //            webViewClient = WebViewClient()
@@ -35,14 +36,17 @@ class ArticleFragment : BaseFragment(R.layout.fragment_article) {
 //            loadUrl("https://www.google.co.in/")
             try{
                 webViewClient = WebViewClient()
-                if (url != null) {
                     loadUrl(data.url)
-                }
             }
             catch (e: Exception){
                 loadUrl("https://www.google.co.in/")
                 Toast.makeText(context, "There is a problem in the url", Toast.LENGTH_LONG).show()
             }
+        }
+
+        binding.fab.setOnClickListener {
+            viewModel.saveThisArticle(data)
+            Toast.makeText(context, "Saved successfully ✅", Toast.LENGTH_SHORT).show()
         }
 
         return binding.root

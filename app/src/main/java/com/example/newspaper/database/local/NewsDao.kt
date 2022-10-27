@@ -12,7 +12,7 @@ import com.example.newspaper.data.Article
 interface NewsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(article : Article): Long      // TODO ???? Int
+    suspend fun upsert(article : Article): Long      // TODO ???? Long
 
     @Query("SELECT * FROM articles")
     fun getAllArticles(): LiveData<List<Article>>   // TODO ???? There will be two tables. one for saved articles and other for cashing.

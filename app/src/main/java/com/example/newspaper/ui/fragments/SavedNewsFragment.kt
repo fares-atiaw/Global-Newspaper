@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.example.newspaper.R
 import com.example.newspaper.adapters.NewsAdapter
 import com.example.newspaper.databinding.FragmentSavedNewsBinding
@@ -15,6 +17,7 @@ import com.example.newspaper.databinding.FragmentSearchNewsBinding
 import com.example.newspaper.ui.NewsViewModel
 import com.example.newspaper.utils.BaseFragment
 import com.example.newspaper.utils.Resource
+import com.google.android.material.snackbar.Snackbar
 
 class SavedNewsFragment : BaseFragment(R.layout.fragment_saved_news){
     lateinit var binding : FragmentSavedNewsBinding
@@ -29,30 +32,52 @@ class SavedNewsFragment : BaseFragment(R.layout.fragment_saved_news){
 
         binding.rvSavedNews.adapter = adapter
 
-        viewModel.searchNews.observe(viewLifecycleOwner) { resource ->
-            when(resource){
-                is Resource.Success -> {
-//                    binding.paginationProgressBar.visibility = View.GONE
-                    resource.data.let {
-                        adapter.submitList(it?.articles)
-                    }
-                }
-                is Resource.Error -> {
-//                    binding.paginationProgressBar.visibility = View.GONE
-                    Toast.makeText(context, "Error happened : ${resource.message}", Toast.LENGTH_LONG).show()
-                }
-                else ->{}
-//                    binding.paginationProgressBar.visibility = View.VISIBLE
+        viewModel.savedNews.observe(viewLifecycleOwner){
+            it.let {
+                adapter.submitList(it)
             }
         }
+
+        ItemTouchHelper(makeTouchHelperCallback()).run {
+            attachToRecyclerView(binding.rvSavedNews)
+        }
+
 
         return binding.root
     }
 
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         binding.unbind()
+    }
+
+    private fun makeTouchHelperCallback(): ItemTouchHelper.SimpleCallback
+    {
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+        ){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean = true
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val article = adapter.currentList[position]
+
+                viewModel.deleteThisArticle(article)
+
+                Snackbar.make(binding.root, "Remove from the list", Snackbar.LENGTH_LONG).apply {
+                    setAction("Undo") {
+                        viewModel.saveThisArticle(article)
+                    }
+                }.show()
+            }
+        }
+
+        return itemTouchHelperCallback
     }
 }

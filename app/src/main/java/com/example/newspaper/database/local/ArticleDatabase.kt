@@ -7,11 +7,12 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.newspaper.data.Article
 
-@Database(entities = [Article::class], version = 1, exportSchema = false)
+@Database(entities = [Article::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class ArticleDatabase : RoomDatabase() {                                   //TODO: update your documentation
 
-    abstract val newsDatabaseDao: NewsDao       //abstract fun getArticleDao(): ArticleDao
+    //abstract fun getArticleDao(): ArticleDao
+    abstract val newsDatabaseDao: NewsDao       // Room will make the connection details with the Dao file
 
     companion object {
 
