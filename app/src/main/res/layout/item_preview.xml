@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -26,23 +27,25 @@
 
             <ImageView
                 android:id="@+id/iv_ArticleImage"
-                android:layout_width="240dp"
-                android:layout_height="160dp"
+                android:layout_width="180dp"
+                android:layout_height="110dp"
                 android:scaleType="centerCrop"
                 app:imageUrl="@{article.urlToImage}"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@{article.title}"/>
 
             <TextView
                 android:id="@+id/tv_Source"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginTop="20dp"
                 android:text="@{article.source.name}"
-                android:textColor="@android:color/black"
+                android:textColor="#015393"
+                android:textStyle="italic|bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.067"
                 app:layout_constraintStart_toEndOf="@+id/iv_ArticleImage"
                 app:layout_constraintTop_toBottomOf="@+id/tv_Title" />
 
@@ -54,9 +57,8 @@
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:text="@{article.title}"
-                android:textColor="@android:color/black"
                 android:textSize="15sp"
-                android:textStyle="bold"
+                android:textColor="@android:color/black"
                 app:layout_constraintLeft_toRightOf="@+id/iv_ArticleImage"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -66,12 +68,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:ellipsize="end"
                 android:maxLines="5"
                 android:text="@{article.description}"
                 android:textColor="@android:color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.25"
                 app:layout_constraintStart_toStartOf="parent"
@@ -81,12 +82,12 @@
                 android:id="@+id/tv_PublishedAt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="140dp"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="6dp"
                 android:text="@{article.publishedAt}"
-                android:textColor="@android:color/black"
-                app:layout_constraintStart_toEndOf="@+id/iv_ArticleImage"
-                app:layout_constraintTop_toBottomOf="@+id/tv_Source" />
+                android:textColor="#797A81"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_Description" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

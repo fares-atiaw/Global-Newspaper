@@ -24,18 +24,12 @@ class ArticleFragment : BaseFragment(R.layout.fragment_article) {
 
         val data = args.anArticle
 
+        // TODO: Create different tables for cashing
+        // TODO: If there is no internet
+
         binding.webView.apply {
-//            settings.javaScriptEnabled = true
-//            webViewClient = WebViewClient()
-//            webViewClient = object : WebViewClient() {
-//                override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-//                    view?.loadUrl(data.url)
-//                    return true
-//                }
-//            }
-//            loadUrl("https://www.google.co.in/")
             try{
-                webViewClient = WebViewClient()
+                this.webViewClient = WebViewClient()
                     loadUrl(data.url)
             }
             catch (e: Exception){
