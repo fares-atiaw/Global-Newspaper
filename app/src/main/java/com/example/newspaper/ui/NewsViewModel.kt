@@ -10,8 +10,10 @@ import com.example.newspaper.data.Article
 import com.example.newspaper.data.NewsResponse
 import com.example.newspaper.database.NewsRepository
 import com.example.newspaper.utils.Resource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 import retrofit2.Response
 
 class NewsViewModel(val repo : NewsRepository) : ViewModel()
@@ -26,10 +28,11 @@ class NewsViewModel(val repo : NewsRepository) : ViewModel()
 
     init {
         getBreakingNews()
+        getMySavedArticles()
     }
 
 /**For BreakingNewsFragment**/
-    fun getBreakingNews(countryString : String = "eg") = viewModelScope.launch {
+    private fun getBreakingNews(countryString : String = "eg") = viewModelScope.launch {
         breakingNews.postValue(Resource.Loading())
         val response = repo.getBreakingNews(countryString, breakingNewsPage)
         breakingNews.postValue(handleBreakingNewsResponse(response))
@@ -64,13 +67,13 @@ class NewsViewModel(val repo : NewsRepository) : ViewModel()
 
 /**Deal with Room**/
     fun saveThisArticle(article: Article) = viewModelScope.launch {
-        val num = repo.addIfNotExist(article)
-        Log.d("NewsViewModel => saveThisArticle(article: Article) ", "--------- $num")
+        repo.addIfNotExist(article)
+        /*Log.d("NewsViewModel "," => Start saving")
+        val num = repo.addIfNotExist(article).wait()
+        Log.d("NewsViewModel => saveThisArticle(article: Article) ", "--------- $num")*/
     }
 
-    fun getMySavedArticles() = viewModelScope.launch {
-        savedNews.postValue(repo.getSavedNews().value)
-    }
+    private fun getMySavedArticles() = savedNews.postValue(repo.getSavedNews().value)
 
     fun deleteThisArticle(article: Article) = viewModelScope.launch {
         repo.deleteArticle(article)

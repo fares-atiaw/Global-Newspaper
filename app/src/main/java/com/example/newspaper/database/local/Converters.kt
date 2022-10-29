@@ -2,6 +2,7 @@ package com.example.newspaper.database.local
 
 import androidx.room.TypeConverter
 import com.example.newspaper.data.Source
+import com.google.gson.Gson
 
 class Converters {
 
@@ -11,8 +12,10 @@ class Converters {
 //    )
 
     @TypeConverter
-    fun fromSource(source: Source) = source.name      // set in the database as a string
+    fun fromSource(source: Source): String =
+        Gson().toJson(source)      // set in the database as a string
 
     @TypeConverter
-    fun toSource(name: String) = Source("-", name)      // get it from the database and compose it into its original datatype
+    fun toSource(stringSource: String) : Source =
+        Gson().fromJson(stringSource, Source::class.java)      // get it from the database and compose it into its original datatype
 }

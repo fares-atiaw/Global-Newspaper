@@ -3,6 +3,8 @@ package com.example.newspaper.database
 import com.example.newspaper.data.Article
 import com.example.newspaper.database.api.RetrofitInstance
 import com.example.newspaper.database.local.ArticleDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class NewsRepository(val db: ArticleDatabase)
 {
@@ -14,7 +16,10 @@ class NewsRepository(val db: ArticleDatabase)
         RetrofitInstance.newsAPI.searchFor(text, pageNum)
 
     /**Local**/
-    suspend fun addIfNotExist(article : Article) = db.newsDatabaseDao.upsert(article)
+    suspend fun addIfNotExist(article : Article) =
+        withContext(Dispatchers.IO){
+            db.newsDatabaseDao.upsert(article)
+    }
 
     fun getSavedNews() = db.newsDatabaseDao.getAllArticles()
 
