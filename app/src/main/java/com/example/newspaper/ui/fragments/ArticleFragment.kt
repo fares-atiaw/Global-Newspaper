@@ -1,5 +1,8 @@
 package com.example.newspaper.ui.fragments
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +32,7 @@ class ArticleFragment : BaseFragment(R.layout.fragment_article) {
 
         binding.webView.apply {
             try{
-                this.webViewClient = WebViewClient()
+                webViewClient = WebViewClient()
                     loadUrl(data.url)
             }
             catch (e: Exception){
@@ -40,7 +43,10 @@ class ArticleFragment : BaseFragment(R.layout.fragment_article) {
 
         binding.fab.setOnClickListener {
             viewModel.saveThisArticle(data)
-            Toast.makeText(context, "Saved successfully ✅", Toast.LENGTH_SHORT).show()
+            fader(binding.fab)
+            binding.fab.isClickable = false
+
+            Toast.makeText(context, "✅", Toast.LENGTH_SHORT).show()
         }
 
         return binding.root
@@ -48,13 +54,21 @@ class ArticleFragment : BaseFragment(R.layout.fragment_article) {
 
 
 
-
-
-
-
-
-    /*override fun onDestroyView() {
+    override fun onDestroyView() {
         super.onDestroyView()
         binding.unbind()
-    }*/
+    }
+
+
+    private fun fader(view : View) {
+        val animator = ObjectAnimator.ofFloat(view, View.ALPHA, 0.05f).apply {
+            repeatMode = ObjectAnimator.REVERSE
+            addListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator?) { view.isEnabled = false }
+                override fun onAnimationEnd(animation: Animator?) { view.isEnabled = true }
+            })
+        }
+        animator.start()
+    }
+
 }

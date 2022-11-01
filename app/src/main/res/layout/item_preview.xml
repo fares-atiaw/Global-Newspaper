@@ -68,15 +68,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="56dp"
                 android:ellipsize="end"
                 android:maxLines="5"
                 android:text="@{article.description}"
                 android:textColor="@android:color/black"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.25"
+                app:layout_constraintHorizontal_bias="0.75"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ArticleImage" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_Source" />
 
             <TextView
                 android:id="@+id/tv_PublishedAt"

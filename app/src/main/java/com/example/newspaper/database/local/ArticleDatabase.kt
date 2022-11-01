@@ -7,11 +7,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.newspaper.data.Article
 
-@Database(entities = [Article::class], version = 1, exportSchema = false)
+@Database(entities = [Article::class], version = 8, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class ArticleDatabase : RoomDatabase() {                                   //TODO: update your documentation
 
-//    abstract fun getArticleDao(): NewsDao
+    //    abstract fun getArticleDao(): NewsDao
     abstract val newsDatabaseDao: NewsDao       // Room will make the connection details with the Dao file
 
     companion object {
@@ -19,20 +19,20 @@ abstract class ArticleDatabase : RoomDatabase() {                               
         @Volatile
         var INSTANCE: ArticleDatabase? = null
 
-        fun getInstance(context: Context): ArticleDatabase
-        {
+        fun getInstance(context: Context): ArticleDatabase {
             synchronized(this) {
                 return INSTANCE ?: Room.databaseBuilder(
-                        context.applicationContext,
-                        ArticleDatabase::class.java,
-                        "article_database")
-                        .fallbackToDestructiveMigration()
-                        .build()
-                }
+                    context.applicationContext,
+                    ArticleDatabase::class.java,
+                    "article_database"
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
             }
+        }
 
     }
-
+}
 
     /*companion object {
 
@@ -55,6 +55,6 @@ abstract class ArticleDatabase : RoomDatabase() {                               
     }*/
 
 
-}
+//}
 
 // for logcat => glUtilsParamSize

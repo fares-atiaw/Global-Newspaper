@@ -1,40 +1,41 @@
 package com.example.newspaper.ui
 
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.newspaper.data.Article
 import com.example.newspaper.data.NewsResponse
 import com.example.newspaper.database.NewsRepository
 import com.example.newspaper.utils.Resource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.launch
-import okhttp3.internal.wait
 import retrofit2.Response
 
 class NewsViewModel(val repo : NewsRepository) : ViewModel()
 {
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    val breakingNewsPage = 1        // update later
+    var breakingNewsPage = 1
+    var currentBreakingNewsResponse : NewsResponse? = null
 
     val searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    val searchNewsPage = 1        // update later
+    var searchNewsPage = 1
+    var currentSearchNewsResponse : NewsResponse? = null
 
-    var savedNews: MutableLiveData<List<Article>> = MutableLiveData()
+    val savedNews : LiveData<List<Article>?> by lazy {
+        repo.getSavedNews()
+    }
+
+//    var addedBefore = false
+    val showNoData: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
         getBreakingNews()
-        getMySavedArticles()
     }
+
 
 /**For BreakingNewsFragment**/
     private fun getBreakingNews(countryString : String = "eg") = viewModelScope.launch {
         breakingNews.postValue(Resource.Loading())
         val response = repo.getBreakingNews(countryString, breakingNewsPage)
+    // handle this response first and check its result, before posting it
         breakingNews.postValue(handleBreakingNewsResponse(response))
     }
 
@@ -42,7 +43,15 @@ class NewsViewModel(val repo : NewsRepository) : ViewModel()
     {
         if(response.isSuccessful)
             response.body().let {
-                return Resource.Success(it)
+                breakingNewsPage++
+
+                if(currentBreakingNewsResponse == null)
+                    currentBreakingNewsResponse = it
+                else{
+                    currentBreakingNewsResponse?.articles?.addAll(it!!.articles)    //incrementing the list of news
+                }
+
+                return Resource.Success(currentBreakingNewsResponse)
             }
         else
             return Resource.Error(response.message(), response.body())
@@ -52,6 +61,7 @@ class NewsViewModel(val repo : NewsRepository) : ViewModel()
     fun searchForNews(text : String) = viewModelScope.launch {
         searchNews.postValue(Resource.Loading())
         val response = repo.getSearchedNews(text, searchNewsPage)
+    // handle this response first and check its result, before posting it
         searchNews.postValue(handleSearchForNewsResponse(response))
     }
 
@@ -59,33 +69,43 @@ class NewsViewModel(val repo : NewsRepository) : ViewModel()
     {
         if(response.isSuccessful)
             response.body().let {
-                return Resource.Success(it)
+                it?.articles?.size //////////////////////////////////////////////////////////
+                searchNewsPage++
+
+                if(currentSearchNewsResponse == null)
+                    currentSearchNewsResponse = it
+                else{
+                    currentSearchNewsResponse?.articles?.addAll(it!!.articles)    //incrementing the list of news
+                }
+
+                return Resource.Success(currentSearchNewsResponse)
             }
         else
             return Resource.Error(response.message(), response.body())
     }
 
 /**Deal with Room**/
-    fun saveThisArticle(article: Article) = viewModelScope.launch {
-        repo.addIfNotExist(article)
-        /*Log.d("NewsViewModel "," => Start saving")
-        val num = repo.addIfNotExist(article).wait()
-        Log.d("NewsViewModel => saveThisArticle(article: Article) ", "--------- $num")*/
+    fun saveThisArticle(article: Article) =
+        viewModelScope.launch {
+//            val f1 = savedNews.value?.size
+            repo.addIfNotExist(article)
+            invalidateShowNoDataForSavedNews()
+//            val f2 = savedNews.value?.size
+//            addedBefore = f1 == f2
     }
-
-    private fun getMySavedArticles() = savedNews.postValue(repo.getSavedNews().value)
 
     fun deleteThisArticle(article: Article) = viewModelScope.launch {
         repo.deleteArticle(article)
+        invalidateShowNoDataForSavedNews()
     }
 
 
 
+    fun invalidateShowNoDataForSavedNews() {
+        showNoData.value = false
 
-
-
-
-
+//        showNoData.value = savedNews.value!!.isNullOrEmpty()
+    }
 
 
 

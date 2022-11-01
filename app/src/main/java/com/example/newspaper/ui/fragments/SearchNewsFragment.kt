@@ -54,7 +54,7 @@ class SearchNewsFragment : BaseFragment(R.layout.fragment_search_news) {
                     Toast.makeText(context, "Error happened : ${resource.message}", Toast.LENGTH_LONG).show()
                 }
                 else ->
-                    binding.paginationProgressBar.visibility = View.VISIBLE
+                    binding.paginationProgressBar.visibility = View.VISIBLE     //Resource.Loading
             }
 
         }

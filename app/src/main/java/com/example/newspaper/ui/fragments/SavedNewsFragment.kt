@@ -1,6 +1,7 @@
 package com.example.newspaper.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,15 @@ class SavedNewsFragment : BaseFragment(R.layout.fragment_saved_news){
 
         binding.rvSavedNews.adapter = adapter
 
+        viewModel.invalidateShowNoDataForSavedNews()
+
+        viewModel.showNoData.observe(viewLifecycleOwner){
+            if(it)
+                binding.noDataIcon.visibility = View.VISIBLE
+            else
+                binding.noDataIcon.visibility = View.GONE
+        }
+
         viewModel.savedNews.observe(viewLifecycleOwner){
             it.let {
                 adapter.submitList(it)
@@ -41,7 +51,6 @@ class SavedNewsFragment : BaseFragment(R.layout.fragment_saved_news){
         ItemTouchHelper(makeTouchHelperCallback()).run {
             attachToRecyclerView(binding.rvSavedNews)
         }
-
 
         return binding.root
     }

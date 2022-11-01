@@ -1,5 +1,7 @@
 package com.example.newspaper.database
 
+import android.util.Log
+import androidx.lifecycle.LiveData
 import com.example.newspaper.data.Article
 import com.example.newspaper.database.api.RetrofitInstance
 import com.example.newspaper.database.local.ArticleDatabase
@@ -16,12 +18,16 @@ class NewsRepository(val db: ArticleDatabase)
         RetrofitInstance.newsAPI.searchFor(text, pageNum)
 
     /**Local**/
-    suspend fun addIfNotExist(article : Article) =
-        withContext(Dispatchers.IO){
-            db.newsDatabaseDao.upsert(article)
-    }
+    suspend fun addIfNotExist(article : Article) = db.newsDatabaseDao.upsert(article)
+//        withContext(Dispatchers.IO) {
+//
+//    }
 
-    fun getSavedNews() = db.newsDatabaseDao.getAllArticles()
+    fun getSavedNews(): LiveData<List<Article>?> {
+        Log.i("Her" , "${db.newsDatabaseDao.getAllArticles().value}")
+        return db.newsDatabaseDao.getAllArticles()
+    }
+//    val savedNews : LiveData<List<Article>?> = db.newsDatabaseDao.getAllArticles()
 
     suspend fun deleteArticle(article : Article) = db.newsDatabaseDao.deleteArticle(article)
 

@@ -3,6 +3,7 @@ package com.example.newspaper.utils
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,11 @@ import com.example.newspaper.adapters.NewsAdapter
 import com.example.newspaper.data.Article
 import com.example.newspaper.data.NewsResponse
 
+@BindingAdapter("sourceIcon")
+fun formatSource(textView: TextView, text: String) {
+    val context = textView.context
+    textView.text = String.format(context.getString(R.string.source_format), text)
+}
 
 @BindingAdapter("listData")								/**  COOL  **/
 fun bindList(rv : RecyclerView, data : List<Article>?) {
@@ -40,6 +46,10 @@ fun bindProgressBar(progressBar: ProgressBar, result : Resource<NewsResponse>)
 @BindingAdapter("imageUrl")
 fun bindImage(imageView : ImageView, imageUrl :String?)
 {
+    if(imageUrl == null){
+        imageView.visibility = View.GONE
+    }
+
     imageUrl?.let {
         val image = it.toUri().buildUpon().scheme("https").build()
         GlideApp.with(imageView.context)

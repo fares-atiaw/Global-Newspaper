@@ -1,5 +1,6 @@
 package com.example.newspaper.utils
 
+// TODO: Note this technique
 sealed class Resource<T>(val data: T? = null , val message: String? = null)
 {
     class Success<T>(data: T?) : Resource<T>(data)

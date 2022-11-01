@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newspaper.data.Article
+import com.example.newspaper.databinding.ItemPreview2Binding
 import com.example.newspaper.databinding.ItemPreviewBinding
 
 class NewsAdapter : ListAdapter<Article, NewsAdapter.MyViewHolder>(Diff_Article()) {
@@ -24,7 +25,7 @@ class NewsAdapter : ListAdapter<Article, NewsAdapter.MyViewHolder>(Diff_Article(
         holder.bind(getItem(position), clickListener)
     }
 
-    class MyViewHolder private constructor(private val binding: ItemPreviewBinding) :
+    class MyViewHolder private constructor(private val binding: ItemPreview2Binding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(data: Article, clickListener: ((data :Article) -> Unit)?) {
@@ -36,8 +37,10 @@ class NewsAdapter : ListAdapter<Article, NewsAdapter.MyViewHolder>(Diff_Article(
             }
             binding.executePendingBindings()
 
-            binding.tvDescription.visibility = if (binding.tvDescription.equals("")) View.GONE else View.VISIBLE
-            binding.tvPublishedAt.visibility = if (binding.tvPublishedAt.equals("")) View.GONE else View.VISIBLE
+            binding.tvDescription.visibility = if (data.description.isNullOrEmpty()) View.GONE
+            else View.VISIBLE
+            binding.tvPublishedAt.visibility = if (data.publishedAt.isNullOrEmpty()) View.GONE
+            else View.VISIBLE
         }
 
         /** private methods**/
@@ -46,7 +49,7 @@ class NewsAdapter : ListAdapter<Article, NewsAdapter.MyViewHolder>(Diff_Article(
         /** static variable(s) or method(s)**/
         companion object {
             fun fromInflating(parent: ViewGroup): MyViewHolder {
-                val binding: ItemPreviewBinding = ItemPreviewBinding.inflate(
+                val binding: ItemPreview2Binding = ItemPreview2Binding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false

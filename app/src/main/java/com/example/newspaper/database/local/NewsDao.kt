@@ -11,11 +11,11 @@ import com.example.newspaper.data.Article
 @Dao
 interface NewsDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun upsert(article : Article): Long      // TODO ???? Int
 
     @Query("SELECT * FROM articles")
-    fun getAllArticles(): LiveData<List<Article>>   // TODO There will be two tables. one for saved articles and other for cashing.
+    fun getAllArticles(): LiveData<List<Article>?>   // TODO There will be two tables. one for saved articles and other for cashing.
 
     @Delete
     suspend fun deleteArticle(article: Article)

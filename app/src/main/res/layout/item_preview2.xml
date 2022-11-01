@@ -12,87 +12,86 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="8dp"
-        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="10dp"
         app:cardBackgroundColor="@color/white"
         app:cardPreventCornerOverlap="true"
-        android:layout_marginTop="1dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginHorizontal="4dp">
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="1dp"
+        android:layout_marginHorizontal="1dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp">
+            android:orientation="vertical"
+            android:padding="6dp">
 
-            <ImageView
-                android:id="@+id/iv_ArticleImage"
-                android:layout_width="350dp"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop"
-                app:imageUrl="@{article.urlToImage}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tv_Source"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginStart="8dp"
-                android:text="@{article.source.name}"
-                android:textColor="#015393"
-                android:textStyle="italic|bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ArticleImage" />
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:id="@+id/iv_ArticleImage"
+                    android:layout_width="180dp"
+                    android:layout_height="110dp"
+                    android:scaleType="centerCrop"
+                    app:imageUrl="@{article.urlToImage}"
+                    android:contentDescription="@{article.title}"/>
 
-            <TextView
-                android:id="@+id/tv_Title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="4dp"
-                android:layout_marginTop="5dp"
-                android:ellipsize="end"
-                android:maxLines="3"
-                android:gravity="center"
-                android:text="@{article.title}"
-                android:textColor="@android:color/black"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_Source" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="start"
+                    android:layout_marginHorizontal="4dp"
+                    >
+                    <TextView
+                        android:id="@+id/tv_Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:text="@{article.title}"
+                        android:textSize="15sp"
+                        android:textColor="@android:color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_Source"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="8dp"
+                        android:gravity="start|bottom"
+                        app:sourceIcon="@{article.source.name}"
+                        android:textColor="#015393"
+                        android:textStyle="italic|bold" />
+
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_Description"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="4dp"
+                android:gravity="start"
                 android:ellipsize="end"
                 android:maxLines="5"
                 android:text="@{article.description}"
-                android:textColor="@android:color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.25"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_Title" />
+                android:textColor="@android:color/black"/>
 
             <TextView
                 android:id="@+id/tv_PublishedAt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:gravity="start"
+                android:layout_gravity="start"
                 android:text="@{article.publishedAt}"
-                android:textColor="#797A81"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.965"
-                app:layout_constraintStart_toEndOf="@+id/tv_Source"
-                app:layout_constraintTop_toBottomOf="@+id/iv_ArticleImage" />
+                android:textColor="#797A81"/>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 </layout>
