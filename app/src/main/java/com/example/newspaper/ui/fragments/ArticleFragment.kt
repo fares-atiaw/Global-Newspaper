@@ -32,7 +32,7 @@ class ArticleFragment : BaseFragment(R.layout.fragment_article) {
 
         binding.webView.apply {
             try{
-                webViewClient = WebViewClient()
+                this.webViewClient = WebViewClient()
                     loadUrl(data.url)
             }
             catch (e: Exception){

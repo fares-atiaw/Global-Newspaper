@@ -19,13 +19,13 @@ data class Article(
     val author: String?,
     val content: String?,
     val description: String?,
-    @ColumnInfo(name = "published_at")
+//    @ColumnInfo(name = "published_at")
     val publishedAt: String?,
     val source: Source,
     val title: String,
     @PrimaryKey
     val url: String,
-    @ColumnInfo(name = "url_to_image")
+//    @ColumnInfo(name = "url_to_image")
     val urlToImage: String?
 ) : Serializable
 {
